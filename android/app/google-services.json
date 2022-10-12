@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "786101838425",
+    "project_id": "qiu-mobile-app",
+    "storage_bucket": "qiu-mobile-app.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:786101838425:android:1041d922722cccd1b10748",
+        "android_client_info": {
+          "package_name": "com.example.qiu"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "786101838425-juqo6eko3kv114s0rquvvhqfekejphe5.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDAR2l6ucK5D9fdYtPO0QynvgOScXfGYY0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "786101838425-juqo6eko3kv114s0rquvvhqfekejphe5.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
