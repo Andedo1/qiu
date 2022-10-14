@@ -19,7 +19,7 @@ class HomePage extends ConsumerStatefulWidget {
 }
 
 class _HomePageState extends ConsumerState<HomePage> {
-  Completer<GoogleMapController>_controller = Completer();
+  final Completer<GoogleMapController>_controller = Completer();
 
   //Debounce to throttle the async calls to search places API
   Timer? _debounce;
@@ -32,16 +32,16 @@ class _HomePageState extends ConsumerState<HomePage> {
   bool getDirections = false;
 
   // Set markers
-  Set<Marker> _markers = Set<Marker>();
-  Set<Polyline> _polylines = Set<Polyline>();
+  Set<Marker> _markers = <Marker>{};
+  Set<Polyline> _polylines = <Polyline>{};
 
   int markerIdCounter = 1;
   int polylineIdCounter = 1;
 
   //Text Editing Controller
   TextEditingController searchController = TextEditingController();
-  TextEditingController _originController = TextEditingController();
-  TextEditingController _destinationController = TextEditingController();
+  final TextEditingController _originController = TextEditingController();
+  final TextEditingController _destinationController = TextEditingController();
 
   //Initial camera position
   static const CameraPosition _kGooglePlex = CameraPosition(
@@ -119,7 +119,7 @@ class _HomePageState extends ConsumerState<HomePage> {
           children: [
             Stack(
               children: [
-                Container(
+                SizedBox(
                   height: MediaQuery.of(context).size.height*1,
                   width: MediaQuery.of(context).size.width,
                   child: GoogleMap(
@@ -199,7 +199,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                   ),
                 ) : Container(),
                 searchFlag.searchToggle ?
-                allSearchResults.allReturnedResults.length != 0 ?
+                allSearchResults.allReturnedResults.isNotEmpty ?
                 Positioned(
                   top: 105,
                   left: 0,
@@ -237,7 +237,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                           children: [
                             const Text('No results to display'),
                             const SizedBox(height: 15.0,),
-                            Container(
+                            SizedBox(
                               width: 200,
                               child: ElevatedButton(
                                 onPressed: () {
@@ -268,7 +268,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                   left: 0,
                   right: 0,
                   child: Padding(
-                    padding: EdgeInsets.fromLTRB(15.0, 30.0, 15.0, 5.0),
+                    padding: const EdgeInsets.fromLTRB(15.0, 30.0, 15.0, 5.0),
                     child: Column(
                       children: [
                         Container(
@@ -296,10 +296,10 @@ class _HomePageState extends ConsumerState<HomePage> {
                           child: TextFormField(
                             controller: _destinationController,
                             decoration: InputDecoration(
-                              contentPadding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 15.0),
+                              contentPadding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 15.0),
                               border: InputBorder.none,
                               hintText: 'destination',
-                              suffixIcon: Container(
+                              suffixIcon: SizedBox(
                                 width: 96,
                                 child: Row(
                                   children: [
@@ -321,7 +321,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                                         );
                                         _setPolylines(directions['polyline_decoded']);
                                       },
-                                      icon: Icon(Icons.search),
+                                      icon: const Icon(Icons.search),
                                     ),
                                     IconButton(
                                       onPressed: () {
@@ -333,7 +333,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                                           _markers = {};
                                         });
                                       },
-                                      icon: Icon(Icons.close),
+                                      icon: const Icon(Icons.close),
                                     )
                                   ],
                                 ),
@@ -357,7 +357,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                       topRight: Radius.circular(22),
                       topLeft: Radius.circular(22),
                     ),
-                    panel: Container(
+                    panel: SizedBox(
                       width: MediaQuery.of(context).size.width,
                       child: Column(
                         children: [
@@ -623,7 +623,7 @@ class _HomePageState extends ConsumerState<HomePage> {
           children: [
             const Icon(Icons.location_on, color: Colors.green, size: 25,),
             const SizedBox(width: 4.0,),
-            Container(
+            SizedBox(
               height: 40.0,
               width: MediaQuery.of(context).size.width*0.6,
               child: Align(

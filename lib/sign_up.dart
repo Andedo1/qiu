@@ -31,6 +31,7 @@ class _SingUpPageState extends State<SingUpPage> {
         email: _emailController.text.trim(),
         password: _passwordController.text.trim(),
       );
+      // ignore: use_build_context_synchronously
       Navigator.pop(context);
     } on FirebaseAuthException catch(e){
       Navigator.pop(context);
@@ -67,7 +68,7 @@ class _SingUpPageState extends State<SingUpPage> {
           backgroundColor: Colors.white,
           actions: [
             Padding(
-              padding: EdgeInsets.only(right: 15.0),
+              padding: const EdgeInsets.only(right: 15.0),
               child: Center(
                 child: GestureDetector(
                   onTap: widget.showLoginPage,
