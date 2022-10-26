@@ -37,6 +37,7 @@ dependencies:
   cloud_firestore: ^3.4.8
   firebase_auth: ^3.3.14
   google_maps_flutter: ^2.2.0
+  geolocator:
   firebase_core:
   flutter_riverpod:
   flutter_polyline_points:

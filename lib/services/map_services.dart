@@ -2,9 +2,9 @@ import 'dart:convert' as convert;
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:http/http.dart' as http;
 import 'package:qiu/models/auto_complete_result.dart';
+import 'package:qiu/secrets.dart';
 
 class MapServices{
-  final String key ='AIzaSyCG-6C6mX11jWeatVstnbhBR7CpeJ5nLu8';
   final String types = 'geocode';
 
 

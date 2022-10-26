@@ -13,23 +13,15 @@ class SignInPage extends StatefulWidget {
 class _SignInPageState extends State<SignInPage> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
+  bool loading = false;
 
   Future signIn() async{
     try{
-      showDialog(context: context, builder: (context) {
-        return const Center(
-          child: CircularProgressIndicator(),
-        );
-        },
-      );
       await FirebaseAuth.instance.signInWithEmailAndPassword(
         email: _emailController.text.trim(),
         password: _passwordController.text.trim(),
       );
-      // ignore: use_build_context_synchronously
-      Navigator.pop(context);
     }on FirebaseAuthException catch(e){
-      Navigator.pop(context);
       _passwordController.clear();
       showDialog(context: context, builder: (context){
         return AlertDialog(
@@ -183,9 +175,15 @@ class _SignInPageState extends State<SignInPage> {
                       ),
                     ),
                     const SizedBox(height: 15.0,),
-                    ElevatedButton(
+                    loading ? const CircularProgressIndicator() : ElevatedButton(
                       onPressed: (){
+                        setState(() {
+                          loading = true;
+                        });
                         signIn();
+                        setState(() {
+                          loading = false;
+                        });
                       },
                       style: TextButton.styleFrom(
                           minimumSize: const Size(280, 45),

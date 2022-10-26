@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'package:fab_circular_menu/fab_circular_menu.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -20,6 +19,8 @@ class HomePage extends ConsumerStatefulWidget {
 
 class _HomePageState extends ConsumerState<HomePage> {
   final Completer<GoogleMapController>_controller = Completer();
+
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   //Debounce to throttle the async calls to search places API
   Timer? _debounce;
@@ -43,12 +44,36 @@ class _HomePageState extends ConsumerState<HomePage> {
   final TextEditingController _originController = TextEditingController();
   final TextEditingController _destinationController = TextEditingController();
 
+
+
   //Initial camera position
   static const CameraPosition _kGooglePlex = CameraPosition(
     target: LatLng(37.42796133580664, -122.085749655962),
     zoom: 14.4746,
   );
 
+  /**
+  Future<Position> _getCurrentPos() async{
+    bool serviceEnabled;
+    LocationPermission permission;
+
+    serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    if (!serviceEnabled){
+      return Future.error('Location services are disabled');
+    }
+    permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied){
+      permission = await Geolocator.requestPermission();
+      if (permission == LocationPermission.denied){
+        return Future.error('Location permissions denied');
+      }
+    }
+    if (permission == LocationPermission.deniedForever){
+      return Future.error('Location permission denied permanently');
+    }
+    Position position = await Geolocator.getCurrentPosition();
+    return position;
+  }  **/
 
   // Set the marker points here
   void _setMarker(point){
@@ -76,6 +101,7 @@ class _HomePageState extends ConsumerState<HomePage> {
     ));
   }
 
+
   @override
   Widget build(BuildContext context) {
 
@@ -83,33 +109,198 @@ class _HomePageState extends ConsumerState<HomePage> {
     final allSearchResults = ref.watch(placeResultsProvider);
     final searchFlag = ref.watch(searchToggleProvider);
 
+
     return Scaffold(
+      key: _scaffoldKey,
       drawer: Drawer(
+        width: MediaQuery.of(context).size.width*0.8,
+        elevation: 1.0,
         child: ListView(
           padding: EdgeInsets.zero,
           children:  [
-            const DrawerHeader(
-              decoration: BoxDecoration(
-                color: Colors.white,
-              ),
-              child: Text('Drawer Header'),
+             DrawerHeader(
+               decoration: const BoxDecoration(
+                 color: Colors.white,
+               ),
+               child: Row(
+                 children: [
+                   Padding(
+                     padding: const EdgeInsets.all(18.0),
+                     child: Container(
+                       height: 80,
+                       width: 80,
+                       decoration: BoxDecoration(
+                         color: Colors.grey.withOpacity(0.2),
+                         borderRadius: BorderRadius.circular(50),
+                       ),
+                       child: const Center(
+                         child: Icon(
+                           Icons.person,
+                           color: Colors.black54,
+                           size: 30,
+                         ),
+                       ),
+                     ),
+                   ),
+                   Column(
+                     mainAxisAlignment: MainAxisAlignment.center,
+                     children: const [
+                       Text(
+                         "Username",
+                         style: TextStyle(
+                           color: Colors.black,
+                         ),
+                       ),
+                       Text(
+                         "Edit profile",
+                         style: TextStyle(
+                             color: Colors.black54
+                         ),
+                       ),
+                     ],
+                   )
+                 ],
+               ),
             ),
-            ListTile(
-              title: const Text('Item 1'),
-              onTap: () {
-                // Update the state of the application
-                Navigator.pop(context);
-              },
-            ),
-            ListTile(
-              title: MaterialButton(
-                onPressed: () {
-                  FirebaseAuth.instance.signOut();
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 18.0),
+              child: ListTile(
+                leading: const Icon(
+                  Icons.wallet,
+                  size: 28,
+                  color: Colors.black,
+                ),
+                title: const Text('Payment'),
+                onTap: () {
+                  // Go to payments page
+                  Navigator.pop(context);
                 },
-                color: Colors.deepOrangeAccent,
-                child: const Text('Sign Out'),
               ),
             ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 18.0),
+              child: ListTile(
+                leading: const Icon(
+                  Icons.price_change_rounded,
+                  size: 28,
+                  color: Colors.black,
+                ),
+                title: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: const[
+                    Text("Promotions"),
+                    Text(
+                      "Enter promo code",
+                      style: TextStyle(
+                        color: Colors.black54,
+                      ),
+                    )
+                  ],
+                ),
+                onTap: () {},
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 18.0),
+              child: ListTile(
+                leading: const Icon(
+                  Icons.library_books_sharp,
+                  size: 28,
+                  color: Colors.black,
+                ),
+                title: const Text('My orders'),
+                onTap: () {
+                  // Go orders page
+                  Navigator.pop(context);
+                },
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 18.0),
+              child: ListTile(
+                leading: const Icon(
+                  Icons.contact_support_outlined,
+                  size: 28,
+                  color: Colors.black,
+                ),
+                title: const Text(
+                  "Support",
+                  style: TextStyle(
+                    color: Colors.black,
+                  ),
+                ),
+                onTap: (){},
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 18.0),
+              child: ListTile(
+                leading: const Icon(
+                  Icons.info_outline,
+                  size: 28,
+                  color: Colors.black,
+                ),
+                title: const Text('About'),
+                onTap: () {
+                  Navigator.pop(context);
+                },
+              ),
+            ),
+            Container(
+              height: 10,
+              width: MediaQuery.of(context).size.width,
+              color: Colors.grey.withOpacity(0.7),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(18.0),
+              child: Container(
+                height: 70,
+                width: MediaQuery.of(context).size.width*0.2,
+                decoration: BoxDecoration(
+                  color: Colors.blue.withOpacity(0.8),
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: ListTile(
+                  title: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: const[
+                       Text(
+                         "Do you own a bowser?",
+                         style: TextStyle(
+                           color: Colors.white,
+                           fontSize: 16,
+                           fontWeight: FontWeight.w600
+                         ),
+                       ),
+                       SizedBox(height: 5,),
+                       Text(
+                         "Apply to get delivery requests",
+                         style: TextStyle(
+                           color: Colors.white,
+                           fontSize: 13,
+                         ),
+                       ),
+                    ],
+                  ),
+                  onTap: () {
+                    // Go to driver application page
+                    Navigator.pop(context);
+                  },
+                ),
+              ),
+            ),
+            const Center(
+              child: Text(
+                "T&C Apply",
+                style: TextStyle(
+                  fontWeight: FontWeight.w600,
+                  fontSize: 12,
+                  decorationColor: Colors.black
+                ),
+              ),
+            )
+
 
           ],
         ),
@@ -124,8 +315,11 @@ class _HomePageState extends ConsumerState<HomePage> {
                   width: MediaQuery.of(context).size.width,
                   child: GoogleMap(
                     mapType: MapType.normal,
+                    zoomControlsEnabled: false,
                     markers: _markers,
                     polylines: _polylines,
+                    myLocationEnabled: true,
+                    myLocationButtonEnabled: true,
                     initialCameraPosition: _kGooglePlex,
                     onMapCreated: (GoogleMapController controller){
                       _controller.complete(controller);
@@ -167,8 +361,8 @@ class _HomePageState extends ConsumerState<HomePage> {
                                   icon: const Icon(Icons.close),
                                 ),
                                 prefixIcon: IconButton(
-                                  onPressed: (){
-                                    // Show Drawer on clicking menu.
+                                  onPressed: () {
+                                    _scaffoldKey.currentState?.openDrawer();
                                   },
                                   icon: const Icon(Icons.menu),
                                 )
@@ -392,6 +586,8 @@ class _HomePageState extends ConsumerState<HomePage> {
                               ],
                             ),
                           ),
+
+                          // Horizontal divider
                           const Divider(
                             color: Colors.blue,
                             thickness: 1,
@@ -538,7 +734,7 @@ class _HomePageState extends ConsumerState<HomePage> {
       floatingActionButton: FabCircularMenu(
         alignment: Alignment.centerRight,
         fabColor: Colors.lightBlueAccent,
-        ringDiameter: 170,
+        ringDiameter: 150,
         ringColor: Colors.white,
         fabOpenColor: Colors.red,
         ringWidth: 40,
@@ -546,11 +742,9 @@ class _HomePageState extends ConsumerState<HomePage> {
         children: [
           IconButton(
             onPressed: (){
-              setState(() {
-
-              });
+              _scaffoldKey.currentState?.openDrawer();
             },
-            icon: const Icon(Icons.add_location_alt_outlined),
+            icon: const Icon(Icons.menu),
           ),
           IconButton(
             onPressed: (){
