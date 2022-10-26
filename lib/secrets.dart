@@ -1,1 +1,0 @@
-const String key ='AIzaSyCG-6C6mX11jWeatVstnbhBR7CpeJ5nLu8';
