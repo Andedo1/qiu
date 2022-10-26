@@ -9,6 +9,8 @@
 .history
 .svn/
 migrate_working_dir/
+lib/secrets.dart
+lib/andedo.dart
 
 # IntelliJ related
 *.iml
@@ -31,7 +33,7 @@ migrate_working_dir/
 .pub-cache/
 .pub/
 /build/
-/lib/secrets.dart
+
 
 # Web related
 lib/generated_plugin_registrant.dart
